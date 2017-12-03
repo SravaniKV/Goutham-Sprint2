@@ -1,6 +1,8 @@
 {% extends 'home/empindex.html' %}
 {% block content %}
 
+
+
 <div class="align-middle">
 
   <!--<form class="form-wrapper" style="text-align: center;" role="search" method="get" action ="{% url 'home:emphome' %}">
@@ -8,6 +10,7 @@
   <input type="text" id="search"  name="q" value="{{ request.GET.q }}" placeholder="Search for..." required>
   <input type="submit" value="Go" id="submit">
   </form>-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
             <form class ="navbar-form navbar-left" style="text-align: center;" role="search" method="get" action="{% url 'home:searchemp' %}">
                 <div class="form-group">
@@ -32,19 +35,49 @@
 </tr>
 </thead>
 <tbody>
-{% for students in students %}
-{% ifequal students.Emp_name|stringformat:"s" user.username %}
-<tr>
-<td>{{ students.Student_id }}</td>
-<td>{{ students.Student_name }}</td>
-<td>{{ students.Student_curr_grade }}</td>
-<td>{{ students.Student_prev_grade }}</td>
-<td>{{ students.School }}</td>
 
-</tr>
-{% endifequal %}
-{% endfor %}
+{% for k1,v1  in students.items %}
+
+                    <tr>
+                        <td>{{ k1 }}</td>
+                        <td style="text-align: center">{{ k1 }}</td>
+                        <td style="text-align: center">{{ v1 }} </td>
+                    </tr>
+                {% endfor %}
+
+<!--{% for students in students %}-->
+<!--{% ifequal students.Emp_name|stringformat:"s" user.username %}-->
+<!--<tr>-->
+<!--<td>{{ students.Student_id }}</td>-->
+<!--<td>{{ students.Student_name }}</td>-->
+<!--<td>{{ students.Student_curr_grade }}</td>-->
+<!--<td>{{ students.Student_prev_grade }}</td>-->
+<!--<td>{{ students.School }}</td>-->
+
+<!--</tr>-->
+<!--{% endifequal %}-->
+<!--{% endfor %}-->
 </tbody>
 </table>
 </div>
+
+<script>
+        function myFunction() {
+          var input, filter, table, tr, td, i;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("myTable");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+              if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+          }
+        }
+        </script>
 {% endblock %}

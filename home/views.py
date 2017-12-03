@@ -18,27 +18,27 @@ from .models import Student,Mentor,Employee
 from .forms import StudentForm,UserForm,EmployeeForm
 
 
-def searchemp(request):
-    name_query = request.GET.get("name")
-    curr_grade_query = request.GET.get("currgrade")
-    prev_grade_query = request.GET.get("prevgrade")
+#def searchemp(request):
+#    name_query = request.GET.get("name")
+#    curr_grade_query = request.GET.get("currgrade")
+#    prev_grade_query = request.GET.get("prevgrade")
 
     # if you want get user from request
     # user = request.user.username
 
-    students = None
-    if (len(name_query) > 0) or (len(curr_grade_query) > 0) or (len(prev_grade_query) > 0):
-        students = Student.objects.filter(
-            Q(Student_name__icontains=name_query, Student_curr_grade__icontains=curr_grade_query,Student_prev_grade__icontains=prev_grade_query)).distinct()
-    elif len(name_query) > 0:
-        students = Student.objects.filter(Q(Student_name__icontains=name_query)).distinct()
-    elif len(curr_grade_query) > 0:
-        students = Student.objects.filter(Q(Student_curr_grade__icontains=curr_grade_query)).distinct()
-    elif len(prev_grade_query) > 0:
-        students = Student.objects.filter(Q(Student_prev_grade__icontains=prev_grade_query)).distinct()
-    else:
-        pass
-    return render(request, 'home/emphome.html', {'students': students})
+#    students = None
+#    if (len(name_query) > 0) or (len(curr_grade_query) > 0) or (len(prev_grade_query) > 0):
+#        students = Student.objects.filter(
+#            Q(Student_name__icontains=name_query, Student_curr_grade__icontains=curr_grade_query,Student_prev_grade__icontains=prev_grade_query)).distinct()
+#    elif len(name_query) > 0:
+#        students = Student.objects.filter(Q(Student_name__icontains=name_query)).distinct()
+#    elif len(curr_grade_query) > 0:
+#        students = Student.objects.filter(Q(Student_curr_grade__icontains=curr_grade_query)).distinct()
+#    elif len(prev_grade_query) > 0:
+#        students = Student.objects.filter(Q(Student_prev_grade__icontains=prev_grade_query)).distinct()
+#    else:
+#        pass
+#    return render(request, 'home/emphome.html', {'students': students})
 
 
 def searchment(request):
@@ -53,7 +53,7 @@ def searchment(request):
     if (len(name_query) > 0) or (len(curr_grade_query) > 0) or (len(prev_grade_query) > 0):
         students = Student.objects.filter(
             Q(Student_name__icontains=name_query, Student_curr_grade__icontains=curr_grade_query,
-              Student_prev_grade__icontains=prev_grade_query)).distinct()
+             Student_prev_grade__icontains=prev_grade_query)).distinct()
     elif len(name_query) > 0:
         students = Student.objects.filter(Q(Student_name__icontains=name_query)).distinct()
     elif len(curr_grade_query) > 0:
@@ -63,6 +63,24 @@ def searchment(request):
     else:
         pass
     return render(request, 'home/mentorhome.html', {'students': students})
+
+
+def searchemp(request):
+    s = Student.objects.all()
+    #p = Patient.objects.all()
+    #sdict = {}
+    dict = {}
+    for x in s:
+        e = Student.objects.get(Student_name=x.Student_name)
+        dict[e.Student_name] = e
+        print("print e" , e)
+        print(x)
+        print(dict)
+
+
+    return render(request, 'home/emphome.html',
+                  { 'students': dict})
+
 
 def home(request):
     return render(request, 'home/base.html',
