@@ -9,7 +9,7 @@ from django.utils import timezone
 regex=r'[0-9]'
 
 class Employee(models.Model):
-    Employee_Id = models.CharField(max_length=10, unique=True)
+    Employee_Id = models.CharField(max_length=10)
     Employee_name = models.CharField(max_length=50)
     Employee_phone = models.CharField(max_length=10, validators=[MinLengthValidator(10), RegexValidator(regex)],
                                       help_text="Phone Number should be 10 digits")
@@ -22,13 +22,13 @@ class Employee(models.Model):
 
 
 class Mentor(models.Model):
-    Mentor_Id = models.CharField(max_length=10,unique=True)
+    Mentor_Id = models.CharField(max_length=10)
     Mentor_name = models.CharField(max_length=49)
     Mentor_phone = models.CharField(max_length=10, validators=[MinLengthValidator(10), RegexValidator(regex)],
                                     help_text="Phone Number should be 10 digits")
-    Mentor_email = models.EmailField(max_length=49, null=True)
+    Mentor_email = models.EmailField(max_length=49, default='X@gmail.com')
     Mentor_Address=models.CharField(max_length=200)
-    Mentor_Gender=models.CharField(max_length=10, null=True ,help_text="Enter F or M")
+    Mentor_Gender=models.CharField(max_length=10, default ='X' ,help_text="Enter F or M")
     #    student_count = models.IntegerField(max_digits=10) (we should do the hardcode in later sprint)
     begining_date = models.DateField(default=timezone.now)
     ending_date = models.DateField(blank=True, null=True)
@@ -44,24 +44,13 @@ class Mentor(models.Model):
     def __str__(self):
        return str(self.Mentor_name)
 
-class Appointment(models.Model):
-    #Sname = models.ForeignKey(Student, related_name='Appointment')
-    #Mname = models.ForeignKey(Mentor, related_name='Appointment')
-    #Sid = models.ForeignKey(Student, related_name='Appointment2')
-    appointment_id = models.CharField(max_length=10,null=True)
-    mentor= models.ForeignKey(Mentor,to_field='Mentor_Id')
-    date=models.DateField(null=True)
-
-    def __str__(self):
-        return str(self.mentor)
-
 class Student(models.Model):
-     Student_id= models.CharField(max_length=15,unique=True)
+     Student_id= models.CharField(max_length=15)
      Student_name=models.CharField(max_length=49)
-     Student_curr_grade = models.CharField(max_length=10, null=True)
-     Student_prev_grade = models.CharField(max_length=10, null=True)
+     Student_curr_grade = models.CharField(max_length=10, default='F')
+     Student_prev_grade = models.CharField(max_length=10, default='F')
      Student_Class = models.CharField(max_length=10)
-     Parents_email = models.EmailField(max_length=200, null=True)
+     Parents_email = models.EmailField(max_length=200, default='X@gmail.com')
      Parents_phone = models.CharField(validators=[MinLengthValidator(10), RegexValidator(regex)], max_length=10)
      School= models.CharField(max_length=49)
      Men_name =models.ForeignKey(Mentor,related_name='Menemail')
@@ -69,7 +58,7 @@ class Student(models.Model):
      Comments=models.CharField(max_length=200, null=True)
      start_date = models.DateTimeField(default=timezone.now)
      last_date = models.DateField(blank=True, null=True)
-     s_app_id= models.ForeignKey(Appointment,related_name='appointmentid')
+
 
      def create(self):
          self.start_date = timezone.now()
@@ -88,7 +77,14 @@ class Student(models.Model):
      def __str__(self):
        return str(self.Student_name)
 
+class Appointment(models.Model):
+    Sname = models.ForeignKey(Student, related_name='Appointment')
+    Mname = models.ForeignKey(Mentor, related_name='Appointment')
+    Sid = models.ForeignKey(Student, related_name='Appointment2')
 
+
+    def __str__(self):
+        return str(self.sname)
 
 
 class ClassName(models.Model):
@@ -100,12 +96,6 @@ class ClassName(models.Model):
 
     def __str__(self):
         return str(self.class_name)
-
-class Attendance(models.Model):
-    student = models.ForeignKey(Student, related_name='appo_stud_id', null=True)
-    appointment = models.ForeignKey(Appointment, related_name='appo_stud_id',null=True)
-    present = models.BooleanField(default=True)
-
 
 
 
